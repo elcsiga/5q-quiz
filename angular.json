@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "3q-ui": {
+    "5q-quiz": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -43,7 +43,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
@@ -57,10 +58,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "3q-ui:build:production"
+              "buildTarget": "5q-quiz:build:production"
             },
             "development": {
-              "buildTarget": "3q-ui:build:development"
+              "buildTarget": "5q-quiz:build:development"
             }
           },
           "options": {
