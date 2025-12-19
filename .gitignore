@@ -3,3 +3,6 @@ dist
 .history
 .vscode
 .angular
+.env
+# Local Netlify folder
+.netlify

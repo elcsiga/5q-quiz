@@ -11,7 +11,8 @@ export const quizTopics = [
   'astronomy',
   'space exploration',
   'hungarian history',
-  'the second world war'
+  'the second world war',
+  'inventors'
 ];
 
 export const getRandomTopic = () => quizTopics[Math.floor(Math.random() * quizTopics.length)];
@@ -19,12 +20,12 @@ export const getRandomTopic = () => quizTopics[Math.floor(Math.random() * quizTo
 export const instructions = (name: string, topic: string) => `
 Act as a quizmaster. Speak Hungarian.
 First greet the player called '${name}',
-and then ask 3 random questions about ${topic}.
+and then ask 5 random questions about ${topic}.
 Do not ask too simple questions.
 When the player answers a question,
  call \`correct_answer\` if the answer was correct,
  otherwise call \`incorrect_answer\`.
-After 3 question say goodbye, call \`end_conversation\` and end the quiz.`;
+After 5 question say goodbye, call \`end_conversation\` and end the quiz.`;
 
 export function createTool(name: string, description: string, invoke: () => any): FunctionTool {
   return {
@@ -61,6 +62,9 @@ export async function initSession(name: string, topic: string, callbacks: Callba
 
   const { token } = await response.json();
   console.log('Token:', token);
+  if (!token) {
+    throw new Error('Failed to fetch token.');
+  }
 
   const agent = new RealtimeAgent({
     name: 'Three questions quiz',
