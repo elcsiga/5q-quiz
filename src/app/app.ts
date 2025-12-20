@@ -31,10 +31,24 @@ export class App implements AfterViewInit {
     this.checkPermissions();
   }
 
+  stopAllSounds() {
+    [
+      this.testSound,
+      this.introSound,
+      this.outroSound,
+      this.correctSound,
+      this.incorrectSound
+    ].forEach((audio) => {
+      audio.nativeElement.pause();
+      audio.nativeElement.currentTime = 0;
+    })
+  }
+
   checkPermissions() {
     navigator.permissions.query({ name: "microphone" }).then((result) => {
       if (result.state === "granted") {
         this.status.set("loading");
+        this.stopAllSounds();
         setTimeout(() => this.status.set("ready"), 2000);
         console.log('Microphone permission granted.');
       } else if (result.state === "prompt") {
@@ -42,6 +56,7 @@ export class App implements AfterViewInit {
         console.log('Need microphone permission.')
       } else if (result.state === "denied") {
         this.status.set("error");
+        this.stopAllSounds();
         console.log('Microphone permission denied.')
       }
     });
@@ -72,6 +87,8 @@ export class App implements AfterViewInit {
   }
 
   start() {
+    this.status.set('starting')
+
     const name = this.activatedRoute.snapshot.queryParamMap.get('name') || 'Karesz';
     const topic = this.activatedRoute.snapshot.queryParamMap.get('topic') || getRandomTopic();
 
@@ -100,12 +117,12 @@ export class App implements AfterViewInit {
         setTimeout(() => {
           closeSession();
           this.status.set('ready');
+          this.stopAllSounds();
         }, 16000);
       }
     })
       .then(() => {
         this.introSound.nativeElement.play();
-        this.status.set('starting')
 
         setTimeout(() => {
           this.status.set('playing');
@@ -123,6 +140,7 @@ export class App implements AfterViewInit {
   stop() {
     this.status.set('stopping');
     closeSession();
+    this.stopAllSounds();
     setTimeout(() => this.status.set('ready'), 1000);
   }
 }
